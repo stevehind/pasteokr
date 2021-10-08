@@ -42,6 +42,54 @@ class TextInput extends React.Component<Props, State> {
         });
     }
     
+    findOsInArray = (text_array: Array<String>) => {
+        let index_of_os: Array<number> = []
+
+        text_array.forEach((line,index) => {
+            if (line.slice(0,3) === "O: ") {
+                console.log({
+                    objective: line.slice(3)
+                })
+
+                index_of_os.push(index)
+            }
+        })
+
+        return index_of_os
+
+    }
+
+    extractOKRBundles = (text_array: Array<String>) => {
+        let okr_array: Array<any> = []
+
+        let index_of_os = this.findOsInArray(text_array)
+
+        index_of_os.forEach((item, index) => {
+            let okr_bundle = text_array.slice(item, index_of_os[index + 1])
+
+            okr_array.push(okr_bundle)
+        })
+
+        console.log("okr_array: %o", okr_array)
+        return okr_array
+    }
+
+    // processOKRBundles = (text_array: Array<String>) => {
+    //     let processed_okr_array: Array<any> = []
+
+    //     let extracted_okr_bundles = this.extractOKRBundles(text_array)
+
+    //     extracted_okr_bundles.forEach((array, index) => {
+    //         // validate
+    //         if (item.slice(0,3) === "O: " || item.slice(0,4) === "KR: ") {
+    //             item.forEach(())
+    //         } else {
+    //             console.error("All lines should start with 'O: ' for objectives, or 'KR: ' for key results.")
+    //         }
+    //     })
+    // }
+
+
     parseTextArray = (text_array: Array<string>) => {
         let classified_array: Array<any> = []
         
@@ -105,7 +153,7 @@ class TextInput extends React.Component<Props, State> {
             let parsed_text_array: Array<string> = input.split("\n");
             console.log("Parsed text: %o", parsed_text_array)
 
-            this.parseClassifiedArray(parsed_text_array);
+            this.extractOKRBundles(parsed_text_array);
         }
     }
 
